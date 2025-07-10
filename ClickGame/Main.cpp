@@ -1,5 +1,21 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 
+namespace Coordinate
+{
+
+	double TOP;
+	double BOTTOM;
+	double LEFT;
+	double RIGHT;
+
+	void Init()
+	{
+		TOP = 0.0;
+		BOTTOM = Scene::Height();
+		LEFT = 0.0;
+		RIGHT = Scene::Width();
+	}
+};
 
 class Ball
 {
@@ -26,7 +42,14 @@ public:
 
 	void reflectOnWalls()
 	{
-
+		if (m_circle.left().x < Coordinate::LEFT || m_circle.right().x > Coordinate::RIGHT)
+		{
+			m_velocity.x *= -1;
+		}
+		if (m_circle.top().y < Coordinate::TOP || m_circle.bottom().y > Coordinate::BOTTOM)
+		{
+			m_velocity.y *= -1;
+		}
 	}
 
 	void vanishWhenClicked()
@@ -39,6 +62,8 @@ public:
 
 void Main()
 {
+	Coordinate::Init();
+
 	Array<Ball> balls;
 
 	for (int i = 0; i < 3; i++)
@@ -54,6 +79,7 @@ void Main()
 			ball.update();
 			ball.draw();
 			ball.vanishWhenClicked();
+			ball.reflectOnWalls();
 		}
 	}
 }
