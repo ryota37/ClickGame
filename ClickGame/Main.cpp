@@ -26,7 +26,7 @@ private:
 public:
 	Ball() :
 		m_circle{RandomVec2(Scene::Rect()), 20},
-		m_velocity{RandomVec2(3)},
+		m_velocity{ RandomVec2(10) }, // The speed of the ball
 		m_isAlive(true){}
 
 	void update()
@@ -42,21 +42,16 @@ public:
 
 	void reflectOnWalls()
 	{
-		if (m_circle.left().x < Coordinate::LEFT || m_circle.right().x > Coordinate::RIGHT)
-		{
-			m_velocity.x *= -1;
-		}
-		if (m_circle.top().y < Coordinate::TOP || m_circle.bottom().y > Coordinate::BOTTOM)
-		{
-			m_velocity.y *= -1;
-		}
+		if (m_circle.left().x < Coordinate::LEFT && m_velocity.x < 0) m_velocity.x *= -1;
+		if (m_circle.right().x > Coordinate::RIGHT && m_velocity.x > 0) m_velocity.x *= -1;
+		if (m_circle.top().y < Coordinate::TOP && m_velocity.y < 0) m_velocity.y *= -1;
+		if (m_circle.bottom().y > Coordinate::BOTTOM && m_velocity.y > 0) m_velocity.y *= -1;
 	}
 
 	void vanishWhenClicked()
 	{
 		if (m_circle.leftClicked()) m_isAlive = false;
 	}
-
 };
 
 
@@ -66,7 +61,8 @@ void Main()
 
 	Array<Ball> balls;
 
-	for (int i = 0; i < 3; i++)
+	// The number of balls
+	for (int i = 0; i < 10; i++)
 	{
 		Ball ball;
 		balls << ball;
